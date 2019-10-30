@@ -1,10 +1,13 @@
 {
-  "name": "ontodia-arca",
-  "version": "0.9.12",
+  "name": "@eleonoraai/ontodia-arca",
+  "version": "0.9.15",
   "description": "Ontodia Library, customized for project ARCA",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/sputniq-space/ontodia.git"
+    "url": "ssh://git@github.com/eleonoraai/ontodia.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "keywords": [
     "owl",
@@ -13,26 +16,23 @@
     "diagram",
     "sparql"
   ],
-  "author": {
-    "name": "ontodia.org",
-    "url": "http://ontodia.org"
-  },
+  "author": "ontodia.org (http://ontodia.org), Eleonora Bernasconi",
   "license": "LGPL-2.1",
   "bugs": {
     "url": "https://github.com/sputniq-space/ontodia/issues"
   },
   "homepage": "https://github.com/sputniq-space/ontodia#readme",
   "scripts": {
-    "demo": "./node_modules/.bin/webpack-dev-server --port 10444 --config webpack.demo.config.js",
+    "demo": "webpack-dev-server --port 10444 --config webpack.demo.config.js",
     "build": "npm run _webpack && npm run typings",
     "build-all": "npm run _webpack && BUNDLE_PEERS=true npm run _webpack",
-    "build-examples": "./node_modules/.bin/webpack --config webpack.demo.config.js",
+    "build-examples": "webpack --config webpack.demo.config.js",
     "test": "npm run build-all && npm run lint",
     "typings": "npm run _typings-tsc && npm run _typings-dts-bundle",
-    "lint": "./node_modules/.bin/tslint -c tslint.ci.json --project tsconfig.json --exclude '**/*.d.ts' -t stylish",
-    "_typings-tsc": "./node_modules/.bin/tsc --declaration --emitDeclarationOnly --outDir dist/temp/dts",
-    "_typings-dts-bundle": "./node_modules/.bin/dts-bundle --main dist/temp/dts/index.d.ts --name ontodia --out ../../ontodia.d.ts",
-    "_webpack": "./node_modules/.bin/webpack"
+    "lint": "tslint -c tslint.ci.json --project tsconfig.json --exclude '**/*.d.ts' -t stylish",
+    "_typings-tsc": "tsc --declaration --emitDeclarationOnly --outDir dist/temp/dts",
+    "_typings-dts-bundle": "dts-bundle --main dist/temp/dts/index.d.ts --name ontodia --out ../../ontodia.d.ts",
+    "_webpack": "webpack"
   },
   "dependencies": {
     "d3-color": "~1.0.2",
