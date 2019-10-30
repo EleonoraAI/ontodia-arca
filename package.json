@@ -1,7 +1,7 @@
 {
-  "name": "ontodia",
+  "name": "ontodia-arca",
   "version": "0.9.12",
-  "description": "Ontodia Library",
+  "description": "Ontodia Library, customized for project ARCA",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/sputniq-space/ontodia.git"
