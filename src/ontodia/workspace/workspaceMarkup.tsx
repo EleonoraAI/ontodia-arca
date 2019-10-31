@@ -124,16 +124,18 @@ export class WorkspaceMarkup extends React.Component<WorkspaceMarkupProps, {}> {
         );
         return {
             type: WorkspaceLayoutType.Column,
-            children: [{
-                id: 'classes',
-                type: WorkspaceLayoutType.Component,
-                content: classTree,
-                heading: 'Classes',
-            }, {
+            children: [
+            // {
+            //     id: 'classes',
+            //     type: WorkspaceLayoutType.Component,
+            //     content: classTree,
+            //     heading: 'Classes',
+            // }, 
+            {
                 id: 'instances',
                 type: WorkspaceLayoutType.Component,
                 content: instancesSearch,
-                heading: 'Instances',
+                heading: 'Search',
             }],
             defaultSize: 275,
             defaultCollapsed: !this.props.isLeftPanelOpen,
