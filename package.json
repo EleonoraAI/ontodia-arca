@@ -1,6 +1,6 @@
 {
   "name": "@eleonoraai/ontodia-arca",
-  "version": "0.9.29",
+  "version": "0.9.33",
   "description": "Ontodia Library, customized for project ARCA",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "diagram",
     "sparql"
   ],
-  "author": "ontodia.org (http://ontodia.org), Eleonora Bernasconi",
+  "author": "ontodia.org (http://ontodia.org), Eleonora Bernasconi, Miguel Ceriani",
   "license": "LGPL-2.1",
   "bugs": {
     "url": "https://github.com/sputniq-space/ontodia/issues"
