@@ -35,6 +35,7 @@
     "_webpack": "webpack"
   },
   "dependencies": {
+    "node-sass": "^4.11.0",
     "d3-color": "~1.0.2",
     "file-saverjs": "~1.3.6",
     "lodash": "~4.17.10",
