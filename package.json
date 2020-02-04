@@ -4,7 +4,7 @@
   "description": "Ontodia Library, customized for project ARCA",
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com/eleonoraai/ontodia.git"
+    "url": "git+ssh://git@github.com/eleonoraai/ontodia.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -16,7 +16,7 @@
     "diagram",
     "sparql"
   ],
-  "author": "ontodia.org (http://ontodia.org), Eleonora Bernasconi, Miguel Ceriani",
+  "author": "ontodia.org (http://ontodia.org)",
   "license": "LGPL-2.1",
   "bugs": {
     "url": "https://github.com/sputniq-space/ontodia/issues"
