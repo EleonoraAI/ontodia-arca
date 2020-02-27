@@ -333,7 +333,7 @@ export class SparqlDataProvider implements DataProvider {
                     ${textSearchPart}
                     ${this.settings.filterAdditionalRestriction}
                 }
-                ${textSearchPart ? 'ORDER BY DESC(?score)' : ''}
+                ${textSearchPart ? 'ORDER BY DESC(?relevance)' : ''}
                 LIMIT ${params.limit} OFFSET ${params.offset}
             }
             ${resolveTemplate(this.settings.filterElementInfoPattern, {dataLabelProperty})}

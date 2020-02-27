@@ -41,7 +41,8 @@ export class Halo extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+        };
     }
 
     componentDidMount() {
@@ -131,7 +132,11 @@ export class Halo extends React.Component<Props, State> {
         const MARGIN = 5;
         const style: React.CSSProperties = {left: x0 - MARGIN, top: y0 - MARGIN,
             width: ((x1 - x0) + MARGIN * 2), height: ((y1 - y0) + MARGIN * 2)};
+        
+        console.log("halo selection:", target.iri)
+        
 
+    
         return (
             <div className={CLASS_NAME} style={style}>
                 {this.renderRemoveOrDeleteButton()}

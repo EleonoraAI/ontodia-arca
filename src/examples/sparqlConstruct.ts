@@ -11,10 +11,12 @@ function onWorkspaceMounted(workspace: Workspace) {
     if (!workspace) { return; }
 
     const model = workspace.getModel();
+    
     const sparqlDataProvider = new SparqlDataProvider({
-        endpointUrl: '/sparql',
+        endpointUrl: 'http://localhost:9999/blazegraph/namespace/kb/sparql',
         queryMethod: SparqlQueryMethod.GET
     }, OWLStatsSettings);
+
     const graphBuilder = new SparqlGraphBuilder(sparqlDataProvider);
 
     const loadingGraph = graphBuilder.getGraphFromConstruct(
@@ -30,6 +32,7 @@ function onWorkspaceMounted(workspace: Workspace) {
             OPTIONAL {?inst ?propType1 ?propValue1.  FILTER(isURI(?propValue1)). }
             OPTIONAL {?propValue2 ?propType2 ?inst.  FILTER(isURI(?propValue2)). }
         } LIMIT 100`,
+        
     );
     workspace.showWaitIndicatorWhile(loadingGraph);
 

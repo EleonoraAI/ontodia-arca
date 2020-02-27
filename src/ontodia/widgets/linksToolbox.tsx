@@ -13,6 +13,7 @@ import { EventObserver } from '../viewUtils/events';
 import { highlightSubstring } from '../widgets/listElementView';
 import { ProgressBar, ProgressState } from '../widgets/progressBar';
 
+
 interface LinkInToolBoxProps {
     view: DiagramView;
     link: FatLinkType;
@@ -24,6 +25,8 @@ interface LinkInToolBoxProps {
 type LinkTypeVisibility = 'invisible' | 'withoutLabels' | 'allVisible';
 
 class LinkInToolBox extends React.Component<LinkInToolBoxProps, {}> {
+
+   
     private onPressFilter = () => {
         if (this.props.onPressFilter) {
             this.props.onPressFilter(this.props.link);
@@ -52,6 +55,8 @@ class LinkInToolBox extends React.Component<LinkInToolBoxProps, {}> {
         const fullText = view.formatLabel(linkType.label, linkType.id);
         return highlightSubstring(fullText, filterKey);
     }
+
+
 
     render() {
         const newIcon = (this.props.link.isNew ? <span className='linkInToolBox__new-tag'>new</span> : '');
@@ -158,10 +163,13 @@ class LinkTypesToolboxView extends React.Component<LinkTypesToolboxViewProps, { 
                 selectedElement.data.label.values,
                 selectedElement.iri
             );
+            
             connectedTo = (
+                
                 <h4 className='links-heading' style={{display: 'block'}}>
                     Connected to{'\u00A0'}
-                    <span>{selectedElementLabel}</span>
+                    
+                    <span>{selectedElement.iri}</span>
                 </h4>
             );
         }
@@ -217,7 +225,6 @@ class LinkTypesToolboxView extends React.Component<LinkTypesToolboxViewProps, { 
         );
     }
 }
-
 export interface LinkTypesToolboxProps {
     view: DiagramView;
     editor: EditorController;

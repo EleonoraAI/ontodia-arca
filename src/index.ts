@@ -22,6 +22,9 @@ export * from './ontodia/data/sparql/sparqlGraphBuilder';
 export { DIAGRAM_CONTEXT_URL_V1 } from './ontodia/data/schema';
 
 export { RestoreGeometry } from './ontodia/diagram/commands';
+
+export { ElementLayer } from './ontodia/diagram/elementLayer';
+
 export {
     Element, ElementEvents, ElementTemplateState, Link, LinkEvents, LinkTemplateState, LinkVertex, Cell, LinkDirection
 } from './ontodia/diagram/elements';
@@ -55,6 +58,8 @@ export { Cancellation, CancellationToken } from './ontodia/viewUtils/async';
 export * from './ontodia/viewUtils/events';
 
 export { PropertySuggestionParams, PropertyScore } from './ontodia/widgets/connectionsMenu';
+
+export { Halo } from './ontodia/widgets/halo';
 
 export { DefaultToolbar, ToolbarProps } from './ontodia/workspace/toolbar';
 export {

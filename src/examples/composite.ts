@@ -28,7 +28,7 @@ class TransformingDataProvider extends SparqlDataProvider {
         let refQueryPart = '';
         const refElementIRI = `<${params.elementId}>`;
         const refElementLinkIRI = params.linkId ? `<${params.linkId}>` : undefined;
-
+        
         //  link to element with specified link type
         // if direction is not specified, provide both patterns and union them
         // FILTER ISIRI is used to prevent blank nodes appearing in results

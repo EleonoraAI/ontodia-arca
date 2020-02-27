@@ -99,6 +99,7 @@ export class ElementLayer extends React.Component<Props, State> {
                         onResize={this.requestSizeUpdate}
                     />
                 );
+                // console.log(state.element.id)
                 const elementDecorator = view._decorateElement(state.element);
                 if (elementDecorator) {
                     return (
@@ -415,6 +416,11 @@ function computeTemplateProps(model: Element, view: DiagramView): TemplateProps 
     const label = view.formatLabel(model.data.label.values, model.iri);
     const {color, icon} = computeStyleFor(model, view);
     const propsAsList = computePropertyTable(model, view);
+
+
+    // console.log('L URI dell entità selezionata è : ', model.iri);
+
+
 
     return {
         elementId: model.id,
