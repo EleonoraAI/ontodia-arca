@@ -28,7 +28,7 @@ import { WorkspaceMarkup, WorkspaceMarkupProps } from './workspaceMarkup';
 import { WorkspaceEventHandler, WorkspaceEventKey } from './workspaceContext';
 import { forceLayout, applyLayout } from '../viewUtils/layout';
 
-const ONTODIA_WEBSITE = 'https://www.dis.uniroma1.it/en/node/18738'; //ARCA_WEBSITE
+const ONTODIA_WEBSITE = 'http://arca.diag.uniroma1.it/'; //ARCA_WEBSITE
 const ONTODIA_LOGO_SVG = require<string>('../../../images/ontodia-logo.svg');
 
 export interface WorkspaceProps {
