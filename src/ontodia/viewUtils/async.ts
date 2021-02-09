@@ -141,7 +141,7 @@ export class CancelledError extends Error {
 }
 
 export function delay(timeout: number) {
-    return new Promise(resolve => window.setTimeout(() => resolve(), timeout));
+    return new Promise(resolve => window.setTimeout(() =>resolve, timeout));
 }
 
 export function animateInterval(

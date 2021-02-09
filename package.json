@@ -21,7 +21,6 @@
   "homepage": "https://github.com/sputniq-space/ontodia#readme",
   "scripts": {
     "demo": "webpack-dev-server --port 10444 --config webpack.demo.config.js",
-    "demotest": "webpack-dev-server --port 10444 --config webpack.config.js",
     "build": "npm run _webpack && npm run typings",
     "build-all": "npm run _webpack && BUNDLE_PEERS=true npm run _webpack",
     "build-examples": "webpack --config webpack.demo.config.js",
