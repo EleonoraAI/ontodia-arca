@@ -1,0 +1,4 @@
+npm login
+npm set registry http://registry.npmjs.org/
+npm link
+npm publish

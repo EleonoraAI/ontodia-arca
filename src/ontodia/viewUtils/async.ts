@@ -14,7 +14,7 @@ export abstract class BatchingScheduler {
             if (this.useAnimationFrame) {
                 this.scheduled = requestAnimationFrame(this.runSynchronously);
             } else {
-                this.scheduled = setTimeout(this.runSynchronously, this.waitingTime);
+                this.scheduled = window.setTimeout(this.runSynchronously, this.waitingTime);
             }
         }
     }
@@ -141,7 +141,7 @@ export class CancelledError extends Error {
 }
 
 export function delay(timeout: number) {
-    return new Promise(resolve => setTimeout(() => resolve(), timeout));
+    return new Promise(resolve => window.setTimeout(() => resolve(), timeout));
 }
 
 export function animateInterval(
