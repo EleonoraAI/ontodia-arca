@@ -21,6 +21,7 @@
   "homepage": "https://github.com/sputniq-space/ontodia#readme",
   "scripts": {
     "demo": "webpack-dev-server --port 10444 --config webpack.demo.config.js",
+    "demotest": "webpack-dev-server --port 10444 --config webpack.config.js",
     "build": "npm run _webpack && npm run typings",
     "build-all": "npm run _webpack && BUNDLE_PEERS=true npm run _webpack",
     "build-examples": "webpack --config webpack.demo.config.js",
@@ -39,6 +40,8 @@
     "n3": "~0.10.0",
     "node-sass": "^4.11.0",
     "rdf-ext": "~0.3.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
     "superagent": "^5.2.2",
     "webcola": "~3.3.8",
     "whatwg-fetch": "~2.0.2"
@@ -48,10 +51,12 @@
     "react-dom": "^15.0.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.11",
     "@types/d3-color": "1.0.4",
     "@types/lodash": "4.14.108",
-    "@types/react": "15.6.9",
-    "@types/react-dom": "15.5.8",
+    "@types/react": "^15.6.9",
+    "@types/react-dom": "^15.5.8",
+    "@types/react-redux": "^7.1.16",
     "canvg-fixed": "1.0.0",
     "css-loader": "1.0.0",
     "dts-bundle": "0.7.2",
@@ -69,7 +74,7 @@
     "ts-loader": "5.1.1",
     "tslib": "1.10.0",
     "tslint": "5.20.0",
-    "typescript": "3.0.3",
+    "typescript": "^3.0.3",
     "url-loader": "1.1.1",
     "webpack": "4.19.0",
     "webpack-cli": "3.1.0",
