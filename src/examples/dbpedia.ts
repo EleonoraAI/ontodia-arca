@@ -1,9 +1,12 @@
 import { createElement, ClassAttributes } from 'react';
+import React = require('react');
 import * as ReactDOM from 'react-dom';
-
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import { Workspace, WorkspaceProps, SparqlDataProvider, SparqlQueryMethod, DBPediaSettings } from '../index';
-
+import { rootReducer } from '../ontodia/rootReducer';
 import { onPageLoad, tryLoadLayoutFromLocalStorage, saveLayoutToLocalStorage } from './common';
+
 
 function onWorkspaceMounted(workspace: Workspace) {
     if (!workspace) { return; }
@@ -31,8 +34,10 @@ const props: WorkspaceProps & ClassAttributes<Workspace> = {
         window.location.reload();
     },
     viewOptions: {
-        onIriClick: ({iri}) => window.open(iri),
+        onIriClick: ({ iri }) => window.open(iri),
     },
 };
+const store = createStore(rootReducer);
 
-onPageLoad(container => ReactDOM.render(createElement(Workspace, props), container));
+//  onPageLoad(container => ReactDOM.render(createElement(Workspace, props),container));
+onPageLoad(container => ReactDOM.render(createElement(Provider, { store: store }, createElement(Workspace, props)), container));

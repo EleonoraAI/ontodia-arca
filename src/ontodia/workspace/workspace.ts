@@ -27,6 +27,8 @@ import { DefaultToolbar, ToolbarProps } from './toolbar';
 import { WorkspaceMarkup, WorkspaceMarkupProps } from './workspaceMarkup';
 import { WorkspaceEventHandler, WorkspaceEventKey } from './workspaceContext';
 import { forceLayout, applyLayout } from '../viewUtils/layout';
+import { AppState } from '../rootReducer';
+import { connect } from 'react-redux';
 
 const ONTODIA_WEBSITE = 'http://arca.diag.uniroma1.it/'; //ARCA_WEBSITE
 const ONTODIA_LOGO_SVG = require<string>('../../../images/ontodia-logo.svg');
@@ -62,7 +64,7 @@ export interface WorkspaceProps {
     leftPanelInitiallyOpen?: boolean;
     /** @default false */
     rightPanelInitiallyOpen?: boolean;
-
+    watermarkSvg?:string;
     /**
      * Set of languages to display diagram data.
      */
@@ -124,7 +126,7 @@ export interface WorkspaceState {
     readonly criteria?: SearchCriteria;
 }
 
-export class Workspace extends Component<WorkspaceProps, WorkspaceState> {
+export class Workspace extends Component<WorkspaceProps, AppState> {
     static readonly defaultProps: Partial<WorkspaceProps> = {
         hideTutorial: true,
         collapseNavigator: false,
@@ -184,7 +186,7 @@ export class Workspace extends Component<WorkspaceProps, WorkspaceState> {
         this.editor.setMetadataApi(metadataApi);
 
         this.view.setLanguage(this.props.language);
-        this.state = {};
+        this.state = {watermarkSvg:'TEST'};
     }
 
     _getPaperArea(): PaperArea | undefined {
@@ -221,7 +223,7 @@ export class Workspace extends Component<WorkspaceProps, WorkspaceState> {
             isRightPanelOpen: this.props.rightPanelInitiallyOpen,
             toolbar: createElement(ToolbarWrapper, {workspace: this}),
             onWorkspaceEvent,
-            watermarkSvg: this._watermarkSvg,
+            watermarkSvg: this.props.watermarkSvg,
             watermarkUrl: this._watermarkUrl,
             elementsSearchPanel: _elementsSearchPanel,
         } as WorkspaceMarkupProps & React.ClassAttributes<WorkspaceMarkup>);
@@ -488,3 +490,16 @@ export function renderTo<WorkspaceComponentProps>(
 ) {
     ReactDOM.render(createElement(workspace, props), container);
 }
+const mapStateToProps = (state: AppState) => {
+    return {
+        watermarkSvg: state.watermarkSvg
+    };
+};
+
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         onIncrementCounter: () => dispatch({type: 'INCREMENT'})
+//     };
+// };
+
+export default connect(mapStateToProps)(Workspace);

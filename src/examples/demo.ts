@@ -1,4 +1,5 @@
 import { createElement, ClassAttributes } from 'react';
+import React = require('react');
 import * as ReactDOM from 'react-dom';
 
 import { Workspace, WorkspaceProps, DemoDataProvider } from '../index';
@@ -8,7 +9,7 @@ import { onPageLoad, tryLoadLayoutFromLocalStorage, saveLayoutToLocalStorage } f
 const CLASSES = require<any>('./resources/classes.json');
 const LINK_TYPES = require<any>('./resources/linkTypes.json');
 const ELEMENTS = require<any>('./resources/elements.json');
-const LINKS  = require<any>('./resources/links.json');
+const LINKS = require<any>('./resources/links.json');
 
 function onWorkspaceMounted(workspace: Workspace) {
     if (!workspace) { return; }
@@ -29,8 +30,9 @@ const props: WorkspaceProps & ClassAttributes<Workspace> = {
         window.location.reload();
     },
     viewOptions: {
-        onIriClick: ({iri}) => window.open(iri),
+        onIriClick: ({ iri }) => window.open(iri),
     },
 };
 
 onPageLoad(container => ReactDOM.render(createElement(Workspace, props), container));
+
