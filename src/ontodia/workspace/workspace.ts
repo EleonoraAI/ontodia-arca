@@ -27,7 +27,7 @@ import { DefaultToolbar, ToolbarProps } from './toolbar';
 import { WorkspaceMarkup, WorkspaceMarkupProps } from './workspaceMarkup';
 import { WorkspaceEventHandler, WorkspaceEventKey } from './workspaceContext';
 import { forceLayout, applyLayout } from '../viewUtils/layout';
-import { AppState } from '../rootReducer';
+import { AppState } from './rootReducer';
 import { connect } from 'react-redux';
 
 const ONTODIA_WEBSITE = 'http://arca.diag.uniroma1.it/'; //ARCA_WEBSITE
@@ -41,7 +41,7 @@ export interface WorkspaceProps {
     onPointerDown?: (e: PointerEvent) => void;
     onPointerMove?: (e: PointerEvent) => void;
     onPointerUp?: (e: PointerUpEvent) => void;
-
+     
     /**
      * Custom toolbar to replace the default one.
      */
@@ -64,7 +64,8 @@ export interface WorkspaceProps {
     leftPanelInitiallyOpen?: boolean;
     /** @default false */
     rightPanelInitiallyOpen?: boolean;
-    watermarkSvg?:string;
+    
+    
     /**
      * Set of languages to display diagram data.
      */
@@ -107,6 +108,8 @@ export interface WorkspaceProps {
      * Overrides label selection based on target language.
      */
     selectLabelLanguage?: LabelLanguageSelector;
+    watermarkSvg?:string;
+    watermarkUrl?:string;
 }
 
 export interface DiagramViewOptions {
@@ -129,6 +132,7 @@ export interface WorkspaceState {
 export class Workspace extends Component<WorkspaceProps, AppState> {
     static readonly defaultProps: Partial<WorkspaceProps> = {
         hideTutorial: true,
+        
         collapseNavigator: false,
         leftPanelInitiallyOpen: true,
         rightPanelInitiallyOpen: false,
@@ -186,7 +190,7 @@ export class Workspace extends Component<WorkspaceProps, AppState> {
         this.editor.setMetadataApi(metadataApi);
 
         this.view.setLanguage(this.props.language);
-        this.state = {watermarkSvg:'TEST'};
+        this.state = {};
     }
 
     _getPaperArea(): PaperArea | undefined {
@@ -224,7 +228,7 @@ export class Workspace extends Component<WorkspaceProps, AppState> {
             toolbar: createElement(ToolbarWrapper, {workspace: this}),
             onWorkspaceEvent,
             watermarkSvg: this.props.watermarkSvg,
-            watermarkUrl: this._watermarkUrl,
+            watermarkUrl: this.props.watermarkUrl,
             elementsSearchPanel: _elementsSearchPanel,
         } as WorkspaceMarkupProps & React.ClassAttributes<WorkspaceMarkup>);
     }
@@ -490,16 +494,19 @@ export function renderTo<WorkspaceComponentProps>(
 ) {
     ReactDOM.render(createElement(workspace, props), container);
 }
-const mapStateToProps = (state: AppState) => {
-    return {
-        watermarkSvg: state.watermarkSvg
-    };
-};
-
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         onIncrementCounter: () => dispatch({type: 'INCREMENT'})
-//     };
-// };
-
-export default connect(mapStateToProps)(Workspace);
+const mapStateToProps = (state: AppState): SvgProp | UrlProp=> ({
+    watermarkSvg: state.watermarkSvg,
+    watermarkUrl:state.watermarkUrl
+    
+    
+  });
+  
+  type SvgProp = Pick<WorkspaceProps, ('watermarkSvg')>;
+  type UrlProp =Pick<WorkspaceProps,('watermarkUrl')>;
+  
+  const ConnectedWorkspace = connect(
+    mapStateToProps,
+   
+  )(Workspace);
+  
+  export default ConnectedWorkspace;
