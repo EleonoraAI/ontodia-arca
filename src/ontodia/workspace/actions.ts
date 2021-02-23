@@ -1,13 +1,14 @@
-import { EReduxActionTypes, IReduxBaseAction } from "./rootReducer";
+import { SearchCriteria } from "../widgets/instancesSearch";
+import * as ActionTypes from "../workspace/action-types"
+export type UpdateCriteriaAction = {
+    type: ActionTypes.UPDATE_CRITERIA,
+    criteria: SearchCriteria,
+};
+export type onSearchCriteriaChanged = typeof onSearchCriteriaChanged;
 
-export interface IReduxToggleMessageAction extends IReduxBaseAction {
-  type: EReduxActionTypes.SEARCH_CRITERIA;
-}
-
-
-export function changeCriteria(): IReduxToggleMessageAction {
-  return {
-    type: EReduxActionTypes.SEARCH_CRITERIA
-  };
-}
-
+export function onSearchCriteriaChanged(criteria: SearchCriteria): UpdateCriteriaAction {
+    return {
+        type: ActionTypes.UPDATE_CRITERIA,
+        criteria,
+    };
+};

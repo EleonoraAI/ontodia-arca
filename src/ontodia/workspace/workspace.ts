@@ -29,7 +29,8 @@ import { WorkspaceEventHandler, WorkspaceEventKey } from './workspaceContext';
 import { forceLayout, applyLayout } from '../viewUtils/layout';
 import { AppState } from './rootReducer';
 import { connect } from 'react-redux';
-
+import { Dispatch } from 'redux';
+import * as Actions from "../workspace/actions"
 const ONTODIA_WEBSITE = 'http://arca.diag.uniroma1.it/'; //ARCA_WEBSITE
 const ONTODIA_LOGO_SVG = require<string>('../../../images/ontodia-logo.svg');
 
@@ -110,6 +111,8 @@ export interface WorkspaceProps {
     selectLabelLanguage?: LabelLanguageSelector;
     watermarkSvg?:string;
     watermarkUrl?:string;
+    criteria?: SearchCriteria;
+    onSearchCriteriaChanged?: (criteria: SearchCriteria) => void;
 }
 
 export interface DiagramViewOptions {
@@ -129,7 +132,7 @@ export interface WorkspaceState {
     readonly criteria?: SearchCriteria;
 }
 
-export class Workspace extends Component<WorkspaceProps, AppState> {
+export class Workspace extends Component<WorkspaceProps, {}> {
     static readonly defaultProps: Partial<WorkspaceProps> = {
         hideTutorial: true,
         
@@ -219,8 +222,8 @@ export class Workspace extends Component<WorkspaceProps, AppState> {
             metadataApi,
             leftPanelInitiallyOpen: this.props.leftPanelInitiallyOpen,
             rightPanelInitiallyOpen: this.props.rightPanelInitiallyOpen,
-            searchCriteria: this.state.criteria,
-            onSearchCriteriaChanged: criteria => this.setState({criteria}),
+            searchCriteria: this.props.onSearchCriteriaChanged,
+            onSearchCriteriaChanged: this.props.onSearchCriteriaChanged,
             zoomOptions: this.props.zoomOptions,
             onZoom: this.props.onZoom,
             isLeftPanelOpen: this.props.leftPanelInitiallyOpen,
@@ -494,18 +497,37 @@ export function renderTo<WorkspaceComponentProps>(
 ) {
     ReactDOM.render(createElement(workspace, props), container);
 }
-const mapStateToProps = (state: AppState): SvgProp | UrlProp=> ({
+const mapStateToProps = (state: AppState): SvgProp | UrlProp |CriteriaProp=> ({
     watermarkSvg: state.watermarkSvg,
-    watermarkUrl:state.watermarkUrl
+    watermarkUrl:state.watermarkUrl,
+    criteria:state.criteria
     
     
   });
   
   type SvgProp = Pick<WorkspaceProps, ('watermarkSvg')>;
   type UrlProp =Pick<WorkspaceProps,('watermarkUrl')>;
-  
+  type CriteriaProp =Pick<WorkspaceProps,('criteria')>;
+
+
+ 
+
+//   const mapDispatchToProps =(dispatch: Dispatch): DispatchProps =>({
+
+//     onSearchCriteriaChanged: () => dispatch({type: 'SEARCH_CRITERIA'})
+
+//   });
+const mapDispatchToProps=(dispatch: Dispatch): DispatchProps =>( {
+    
+    onSearchCriteriaChanged: (newCriteria: SearchCriteria) => {
+        dispatch(Actions.onSearchCriteriaChanged(newCriteria));
+      
+    }
+  });
+
+  type DispatchProps = Pick<WorkspaceProps, 'onSearchCriteriaChanged'>;
   const ConnectedWorkspace = connect(
-    mapStateToProps,
+    mapStateToProps,mapDispatchToProps
    
   )(Workspace);
   
