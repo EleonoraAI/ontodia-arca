@@ -42,7 +42,7 @@ export interface WorkspaceProps {
     onPointerDown?: (e: PointerEvent) => void;
     onPointerMove?: (e: PointerEvent) => void;
     onPointerUp?: (e: PointerUpEvent) => void;
-     
+
     /**
      * Custom toolbar to replace the default one.
      */
@@ -65,8 +65,8 @@ export interface WorkspaceProps {
     leftPanelInitiallyOpen?: boolean;
     /** @default false */
     rightPanelInitiallyOpen?: boolean;
-    
-    
+
+
     /**
      * Set of languages to display diagram data.
      */
@@ -109,8 +109,8 @@ export interface WorkspaceProps {
      * Overrides label selection based on target language.
      */
     selectLabelLanguage?: LabelLanguageSelector;
-    watermarkSvg?:string;
-    watermarkUrl?:string;
+    watermarkSvg?: string;
+    watermarkUrl?: string;
     criteria?: SearchCriteria;
     onSearchCriteriaChanged?: (criteria: SearchCriteria) => void;
 }
@@ -135,13 +135,13 @@ export interface WorkspaceState {
 export class Workspace extends Component<WorkspaceProps, {}> {
     static readonly defaultProps: Partial<WorkspaceProps> = {
         hideTutorial: true,
-        
+
         collapseNavigator: false,
         leftPanelInitiallyOpen: true,
         rightPanelInitiallyOpen: false,
         languages: [
-            {code: 'en', label: 'English'},
-            {code: 'ru', label: 'Russian'},
+            { code: 'en', label: 'English' },
+            { code: 'ru', label: 'Russian' },
         ],
         language: 'en',
     };
@@ -222,13 +222,13 @@ export class Workspace extends Component<WorkspaceProps, {}> {
             metadataApi,
             leftPanelInitiallyOpen: this.props.leftPanelInitiallyOpen,
             rightPanelInitiallyOpen: this.props.rightPanelInitiallyOpen,
-            searchCriteria: this.props.onSearchCriteriaChanged,
+            searchCriteria: this.props.criteria,
             onSearchCriteriaChanged: this.props.onSearchCriteriaChanged,
             zoomOptions: this.props.zoomOptions,
             onZoom: this.props.onZoom,
             isLeftPanelOpen: this.props.leftPanelInitiallyOpen,
             isRightPanelOpen: this.props.rightPanelInitiallyOpen,
-            toolbar: createElement(ToolbarWrapper, {workspace: this}),
+            toolbar: createElement(ToolbarWrapper, { workspace: this }),
             onWorkspaceEvent,
             watermarkSvg: this.props.watermarkSvg,
             watermarkUrl: this.props.watermarkUrl,
@@ -237,7 +237,7 @@ export class Workspace extends Component<WorkspaceProps, {}> {
     }
 
     componentDidMount() {
-        const {onWorkspaceEvent} = this.props;
+        const { onWorkspaceEvent } = this.props;
 
         this.editor._initializePaperComponents(this.markup.paperArea);
         this.updateNavigator(!this.props.hideNavigator);
@@ -247,9 +247,9 @@ export class Workspace extends Component<WorkspaceProps, {}> {
             this.markup.paperArea.centerContent();
         });
 
-        this.listener.listen(this.model.events, 'elementEvent', ({key, data}) => {
+        this.listener.listen(this.model.events, 'elementEvent', ({ key, data }) => {
             if (!data.requestedAddToFilter) { return; }
-            const {source, linkType, direction} = data.requestedAddToFilter;
+            const { source, linkType, direction } = data.requestedAddToFilter;
             this.setState({
                 criteria: {
                     refElement: source,
@@ -313,10 +313,10 @@ export class Workspace extends Component<WorkspaceProps, {}> {
 
     private updateNavigator(showNavigator: boolean) {
         if (showNavigator) {
-            const widget = createElement(Navigator, {view: this.view, expanded: !this.props.collapseNavigator});
-            this.view.setPaperWidget({key: 'navigator', widget, attachment: WidgetAttachment.Viewport});
+            const widget = createElement(Navigator, { view: this.view, expanded: !this.props.collapseNavigator });
+            this.view.setPaperWidget({ key: 'navigator', widget, attachment: WidgetAttachment.Viewport });
         } else {
-            this.view.setPaperWidget({key: 'navigator', widget: undefined, attachment: WidgetAttachment.Viewport});
+            this.view.setPaperWidget({ key: 'navigator', widget: undefined, attachment: WidgetAttachment.Viewport });
         }
     }
 
@@ -347,7 +347,7 @@ export class Workspace extends Component<WorkspaceProps, {}> {
             }).catch(error => {
                 // tslint:disable-next-line:no-console
                 console.error(error);
-                this.editor.setSpinner({statusText: 'Unknown error occured', errorOccured: true});
+                this.editor.setSpinner({ statusText: 'Unknown error occured', errorOccured: true });
             });
         }
     }
@@ -356,7 +356,7 @@ export class Workspace extends Component<WorkspaceProps, {}> {
         const batch = this.model.history.startBatch('Force layout');
         batch.history.registerToUndo(RestoreGeometry.capture(this.model));
 
-        applyLayout(this.model, forceLayout({model: this.model}));
+        applyLayout(this.model, forceLayout({ model: this.model }));
 
         for (const link of this.model.links) {
             link.setVertices([]);
@@ -369,14 +369,14 @@ export class Workspace extends Component<WorkspaceProps, {}> {
         this.markup.paperArea.exportSVG().then(svg => {
             fileName = fileName || 'diagram.svg';
             const xmlEncodingHeader = '<?xml version="1.0" encoding="UTF-8"?>';
-            const blob = new Blob([xmlEncodingHeader + svg], {type: 'image/svg+xml'});
+            const blob = new Blob([xmlEncodingHeader + svg], { type: 'image/svg+xml' });
             saveAs(blob, fileName);
         });
     }
 
     exportPng = (fileName?: string) => {
         fileName = fileName || 'diagram.png';
-        this.markup.paperArea.exportPNG({backgroundColor: 'white'}).then(dataUri => {
+        this.markup.paperArea.exportPNG({ backgroundColor: 'white' }).then(dataUri => {
             const blob = dataURLToBlob(dataUri);
             saveAs(blob, fileName);
         });
@@ -412,7 +412,7 @@ export class Workspace extends Component<WorkspaceProps, {}> {
     }
 
     changeLanguage = (language: string) => {
-        const {onLanguageChange} = this.props;
+        const { onLanguageChange } = this.props;
         // if language is in controlled mode we'll just forward the change
         if (onLanguageChange) {
             onLanguageChange(language);
@@ -436,10 +436,10 @@ class ToolbarWrapper extends Component<ToolbarWrapperProps, {}> {
     private readonly listener = new EventObserver();
 
     render() {
-        const {workspace} = this.props;
+        const { workspace } = this.props;
         const view = workspace.getDiagram();
         const editor = workspace.getEditor();
-        const {languages, onSaveDiagram, onPersistChanges, hidePanels, toolbar} = workspace.props;
+        const { languages, onSaveDiagram, onPersistChanges, hidePanels, toolbar } = workspace.props;
 
         const canPersistChanges = onPersistChanges ? editor.authoringState.events.length > 0 : undefined;
         const canSaveDiagram = !canPersistChanges;
@@ -478,7 +478,7 @@ class ToolbarWrapper extends Component<ToolbarWrapperProps, {}> {
     }
 
     componentDidMount() {
-        const {workspace} = this.props;
+        const { workspace } = this.props;
         const editor = workspace.getEditor();
         this.listener.listen(editor.events, 'changeAuthoringState', () => {
             this.forceUpdate();
@@ -497,38 +497,4 @@ export function renderTo<WorkspaceComponentProps>(
 ) {
     ReactDOM.render(createElement(workspace, props), container);
 }
-const mapStateToProps = (state: AppState): SvgProp | UrlProp |CriteriaProp=> ({
-    watermarkSvg: state.watermarkSvg,
-    watermarkUrl:state.watermarkUrl,
-    criteria:state.criteria
-    
-    
-  });
-  
-  type SvgProp = Pick<WorkspaceProps, ('watermarkSvg')>;
-  type UrlProp =Pick<WorkspaceProps,('watermarkUrl')>;
-  type CriteriaProp =Pick<WorkspaceProps,('criteria')>;
 
-
- 
-
-//   const mapDispatchToProps =(dispatch: Dispatch): DispatchProps =>({
-
-//     onSearchCriteriaChanged: () => dispatch({type: 'SEARCH_CRITERIA'})
-
-//   });
-const mapDispatchToProps=(dispatch: Dispatch): DispatchProps =>( {
-    
-    onSearchCriteriaChanged: (newCriteria: SearchCriteria) => {
-        dispatch(Actions.onSearchCriteriaChanged(newCriteria));
-      
-    }
-  });
-
-  type DispatchProps = Pick<WorkspaceProps, 'onSearchCriteriaChanged'>;
-  const ConnectedWorkspace = connect(
-    mapStateToProps,mapDispatchToProps
-   
-  )(Workspace);
-  
-  export default ConnectedWorkspace;
