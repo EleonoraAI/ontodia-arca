@@ -73,7 +73,7 @@
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
     "ts-loader": "^5.1.1",
-    "tslib": "1.10.0",
+    "tslib": "^2.1.0",
     "tslint": "5.20.0",
     "typescript": "^3.0.3",
     "url-loader": "1.1.1",
