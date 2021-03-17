@@ -27,9 +27,9 @@ import { DefaultToolbar, ToolbarProps } from './toolbar';
 import { WorkspaceMarkup, WorkspaceMarkupProps } from './workspaceMarkup';
 import { WorkspaceEventHandler, WorkspaceEventKey } from './workspaceContext';
 import { forceLayout, applyLayout } from '../viewUtils/layout';
-import { AppState } from './rootReducer';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { AppState, rootReducer } from './rootReducer';
+import { connect, Provider } from 'react-redux';
+import { createStore, Dispatch } from 'redux';
 import * as Actions from "../workspace/actions"
 const ONTODIA_WEBSITE = 'http://arca.diag.uniroma1.it/'; //ARCA_WEBSITE
 const ONTODIA_LOGO_SVG = require<string>('../../../images/ontodia-logo.svg');
@@ -490,11 +490,47 @@ class ToolbarWrapper extends Component<ToolbarWrapperProps, {}> {
     }
 }
 
+const store = createStore(rootReducer);
+
+const mapStateToProps = (state: AppState): SvgProp | UrlProp | CriteriaProp => ({
+    watermarkSvg: state.watermarkSvg,
+    watermarkUrl: state.watermarkUrl,
+    criteria: state.criteria
+});
+
+type SvgProp = Pick<WorkspaceProps, ('watermarkSvg')>;
+type UrlProp = Pick<WorkspaceProps, ('watermarkUrl')>;
+type CriteriaProp = Pick<WorkspaceProps, ('criteria')>;
+
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
+
+    onSearchCriteriaChanged: (newCriteria: SearchCriteria) => {
+        dispatch(Actions.onSearchCriteriaChanged(newCriteria));
+
+    }
+});
+type DispatchProps = Pick<WorkspaceProps, 'onSearchCriteriaChanged'>;
+
+const ConnectedWorkspace = connect(
+    mapStateToProps, mapDispatchToProps, null, { forwardRef: true }
+
+)(Workspace);
+
+
+// export function renderTo<WorkspaceComponentProps>(
+//     workspace: React.ComponentClass<WorkspaceComponentProps>,
+//     container: HTMLElement,
+//     props: WorkspaceComponentProps,
+// ) {
+//     ReactDOM.render(createElement(workspace, props), container);
+// }
+
 export function renderTo<WorkspaceComponentProps>(
     workspace: React.ComponentClass<WorkspaceComponentProps>,
     container: HTMLElement,
     props: WorkspaceComponentProps,
 ) {
-    ReactDOM.render(createElement(workspace, props), container);
+    ReactDOM.render(createElement(Provider, { store: store },
+        createElement(ConnectedWorkspace, props)), container);
 }
-
+export default ConnectedWorkspace;
