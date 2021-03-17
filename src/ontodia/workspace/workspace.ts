@@ -1,4 +1,4 @@
-import { Component, createElement, ReactElement, cloneElement } from 'react';
+import { Component, createElement, ReactElement, cloneElement, ClassAttributes } from 'react';
 import * as ReactDOM from 'react-dom';
 import * as saveAs from 'file-saverjs';
 
@@ -31,6 +31,9 @@ import { AppState, rootReducer } from './rootReducer';
 import { connect, Provider } from 'react-redux';
 import { createStore, Dispatch } from 'redux';
 import * as Actions from "../workspace/actions"
+import { onPageLoad, saveLayoutToLocalStorage, tryLoadLayoutFromLocalStorage } from '../../examples/common';
+import { SparqlDataProvider, SparqlQueryMethod } from '../data/sparql/sparqlDataProvider';
+import { DBPediaSettings } from '../data/sparql/sparqlDataProviderSettings';
 const ONTODIA_WEBSITE = 'http://arca.diag.uniroma1.it/'; //ARCA_WEBSITE
 const ONTODIA_LOGO_SVG = require<string>('../../../images/ontodia-logo.svg');
 
@@ -490,6 +493,14 @@ class ToolbarWrapper extends Component<ToolbarWrapperProps, {}> {
     }
 }
 
+export function renderTo<WorkspaceComponentProps>(
+    workspace: React.ComponentClass<WorkspaceComponentProps>,
+    container: HTMLElement,
+    props: WorkspaceComponentProps,
+) {
+    ReactDOM.render(createElement(workspace, props), container);
+}
+// redux store 
 const store = createStore(rootReducer);
 
 const mapStateToProps = (state: AppState): SvgProp | UrlProp | CriteriaProp => ({
@@ -517,20 +528,41 @@ const ConnectedWorkspace = connect(
 )(Workspace);
 
 
-// export function renderTo<WorkspaceComponentProps>(
-//     workspace: React.ComponentClass<WorkspaceComponentProps>,
-//     container: HTMLElement,
-//     props: WorkspaceComponentProps,
-// ) {
-//     ReactDOM.render(createElement(workspace, props), container);
-// }
 
-export function renderTo<WorkspaceComponentProps>(
-    workspace: React.ComponentClass<WorkspaceComponentProps>,
-    container: HTMLElement,
-    props: WorkspaceComponentProps,
-) {
-    ReactDOM.render(createElement(Provider, { store: store },
-        createElement(ConnectedWorkspace, props)), container);
+
+function onWorkspaceMounted(workspace: Workspace) {
+    if (!workspace) { return; }
+
+    const diagram = tryLoadLayoutFromLocalStorage();
+    workspace.getModel().importLayout({
+        diagram,
+        validateLinks: true,
+        dataProvider: new SparqlDataProvider({
+            endpointUrl: 'https://dbpedia.org/sparql',
+            imagePropertyUris: [
+                'http://xmlns.com/foaf/0.1/depiction',
+                'http://xmlns.com/foaf/0.1/img',
+            ],
+            queryMethod: SparqlQueryMethod.GET,
+        }, DBPediaSettings),
+    });
 }
-export default ConnectedWorkspace;
+
+const props: WorkspaceProps & ClassAttributes<Workspace> = {
+    ref: onWorkspaceMounted,
+    onSaveDiagram: workspace => {
+        const diagram = workspace.getModel().exportLayout();
+        window.location.hash = saveLayoutToLocalStorage(diagram);
+        window.location.reload();
+    },
+    viewOptions: {
+        onIriClick: ({ iri }) => window.open(iri),
+    },
+
+};
+
+onPageLoad((container) => ReactDOM.render(
+    createElement(Provider, { store: store },
+        createElement(ConnectedWorkspace, props),
+    ), container));
+
