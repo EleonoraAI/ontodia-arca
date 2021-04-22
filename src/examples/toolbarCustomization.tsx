@@ -4,7 +4,6 @@ import * as ReactDOM from 'react-dom';
 import { Workspace, WorkspaceProps, DemoDataProvider, ToolbarProps } from '../index';
 import { onPageLoad, tryLoadLayoutFromLocalStorage, saveLayoutToLocalStorage } from './common';
 
-import { ElementLayer } from '../ontodia/diagram/elementLayer';
 
 const CLASSES = require<any>('./resources/classes.json');
 const LINK_TYPES = require<any>('./resources/linkTypes.json');

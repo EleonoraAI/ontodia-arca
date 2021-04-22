@@ -1,5 +1,5 @@
 import { SearchCriteria } from "../widgets/instancesSearch";
-import * as ActionTypes from "../workspace/action-types"
+import * as ActionTypes from "../store/action-types"
 export type UpdateCriteriaAction = {
     type: ActionTypes.UPDATE_CRITERIA,
     criteria: SearchCriteria,

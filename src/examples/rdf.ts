@@ -5,6 +5,10 @@ import { Workspace, WorkspaceProps, RDFDataProvider, GroupTemplate } from '../in
 
 import { ExampleMetadataApi, ExampleValidationApi } from './resources/exampleMetadataApi';
 import { onPageLoad, tryLoadLayoutFromLocalStorage, saveLayoutToLocalStorage } from './common';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { rootReducer } from '../ontodia/store/rootReducer';
+import ConnectedWorkspace from '../ontodia/workspace/workspace';
 
 const N3Parser: any = require('rdf-parser-n3');
 const RdfXmlParser: any = require('rdf-parser-rdfxml');
@@ -69,4 +73,10 @@ const props: WorkspaceProps & ClassAttributes<Workspace> = {
     },
 };
 
-onPageLoad(container => ReactDOM.render(createElement(Workspace, props), container));
+const store = createStore(rootReducer);
+
+onPageLoad((container) => ReactDOM.render(
+    createElement(Provider, { store: store },
+        createElement(ConnectedWorkspace, props),
+    ), container));
+

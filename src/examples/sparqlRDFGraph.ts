@@ -1,7 +1,10 @@
 import { createElement, ClassAttributes } from 'react';
 import * as ReactDOM from 'react-dom';
-
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import { Workspace, WorkspaceProps, SparqlDataProvider, OWLStatsSettings, GraphBuilder, Triple } from '../index';
+import { rootReducer } from '../ontodia/store/rootReducer';
+import ConnectedWorkspace from '../ontodia/workspace/workspace';
 
 import { onPageLoad } from './common';
 
@@ -92,4 +95,11 @@ const props: WorkspaceProps & ClassAttributes<Workspace> = {
     ref: onWorkspaceMounted,
 };
 
-onPageLoad(container => ReactDOM.render(createElement(Workspace, props), container));
+// redux store 
+const store = createStore(rootReducer);
+
+onPageLoad((container) => ReactDOM.render(
+    createElement(Provider, { store: store },
+        createElement(ConnectedWorkspace, props),
+    ), container));
+

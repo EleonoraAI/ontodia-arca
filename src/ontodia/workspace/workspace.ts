@@ -1,4 +1,4 @@
-import { Component, createElement, ReactElement, cloneElement, ClassAttributes } from 'react';
+import { Component, createElement, ReactElement, cloneElement } from 'react';
 import * as ReactDOM from 'react-dom';
 import * as saveAs from 'file-saverjs';
 
@@ -9,7 +9,7 @@ import { ValidationApi } from '../data/validationApi';
 
 import { Rect } from '../diagram/geometry';
 import { RestoreGeometry } from '../diagram/commands';
-import { Command, CommandHistory, NonRememberingHistory } from '../diagram/history';
+import { CommandHistory, NonRememberingHistory } from '../diagram/history';
 import { PaperArea, ZoomOptions, PointerEvent, PointerUpEvent } from '../diagram/paperArea';
 import { DiagramView, IriClickHandler, LabelLanguageSelector, WidgetAttachment } from '../diagram/view';
 
@@ -27,13 +27,10 @@ import { DefaultToolbar, ToolbarProps } from './toolbar';
 import { WorkspaceMarkup, WorkspaceMarkupProps } from './workspaceMarkup';
 import { WorkspaceEventHandler, WorkspaceEventKey } from './workspaceContext';
 import { forceLayout, applyLayout } from '../viewUtils/layout';
-import { AppState, rootReducer } from './rootReducer';
-import { connect, Provider } from 'react-redux';
-import { createStore, Dispatch } from 'redux';
-import * as Actions from "../workspace/actions"
-import { onPageLoad, saveLayoutToLocalStorage, tryLoadLayoutFromLocalStorage } from '../../examples/common';
-import { SparqlDataProvider, SparqlQueryMethod } from '../data/sparql/sparqlDataProvider';
-import { DBPediaSettings } from '../data/sparql/sparqlDataProviderSettings';
+import { AppState } from '../store/rootReducer';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import * as Actions from "../store/actions"
 const ONTODIA_WEBSITE = 'http://arca.diag.uniroma1.it/'; //ARCA_WEBSITE
 const ONTODIA_LOGO_SVG = require<string>('../../../images/ontodia-logo.svg');
 
@@ -500,9 +497,8 @@ export function renderTo<WorkspaceComponentProps>(
 ) {
     ReactDOM.render(createElement(workspace, props), container);
 }
-// redux store 
-const store = createStore(rootReducer);
 
+//redux container
 const mapStateToProps = (state: AppState): SvgProp | UrlProp | CriteriaProp => ({
     watermarkSvg: state.watermarkSvg,
     watermarkUrl: state.watermarkUrl,
@@ -526,43 +522,8 @@ const ConnectedWorkspace = connect(
     mapStateToProps, mapDispatchToProps, null, { forwardRef: true }
 
 )(Workspace);
+export default ConnectedWorkspace
 
 
 
-
-function onWorkspaceMounted(workspace: Workspace) {
-    if (!workspace) { return; }
-
-    const diagram = tryLoadLayoutFromLocalStorage();
-    workspace.getModel().importLayout({
-        diagram,
-        validateLinks: true,
-        dataProvider: new SparqlDataProvider({
-            endpointUrl: 'https://dbpedia.org/sparql',
-            imagePropertyUris: [
-                'http://xmlns.com/foaf/0.1/depiction',
-                'http://xmlns.com/foaf/0.1/img',
-            ],
-            queryMethod: SparqlQueryMethod.GET,
-        }, DBPediaSettings),
-    });
-}
-
-const props: WorkspaceProps & ClassAttributes<Workspace> = {
-    ref: onWorkspaceMounted,
-    onSaveDiagram: workspace => {
-        const diagram = workspace.getModel().exportLayout();
-        window.location.hash = saveLayoutToLocalStorage(diagram);
-        window.location.reload();
-    },
-    viewOptions: {
-        onIriClick: ({ iri }) => window.open(iri),
-    },
-
-};
-
-onPageLoad((container) => ReactDOM.render(
-    createElement(Provider, { store: store },
-        createElement(ConnectedWorkspace, props),
-    ), container));
 

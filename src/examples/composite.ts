@@ -1,5 +1,7 @@
 import { createElement, ClassAttributes } from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+
 
 import {
     Workspace,
@@ -19,6 +21,9 @@ const JsonLdParser: any = require('rdf-parser-jsonld');
 import { onPageLoad, tryLoadLayoutFromLocalStorage, saveLayoutToLocalStorage } from './common';
 import { LinkBinding } from '../ontodia/data/sparql/sparqlModels';
 import { getLinksInfo } from '../ontodia/data/sparql/responseHandler';
+import { createStore } from 'redux';
+import { rootReducer } from '../ontodia/store/rootReducer';
+import ConnectedWorkspace from '../ontodia/workspace/workspace';
 
 const data = require<string>('./resources/testData.ttl');
 
@@ -188,4 +193,11 @@ const props: WorkspaceProps & ClassAttributes<Workspace> = {
     },
 };
 
-onPageLoad(container => ReactDOM.render(createElement(Workspace, props), container));
+// redux store 
+const store = createStore(rootReducer);
+
+onPageLoad((container) => ReactDOM.render(
+    createElement(Provider, { store: store },
+        createElement(ConnectedWorkspace, props),
+    ), container));
+

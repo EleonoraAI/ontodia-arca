@@ -23,7 +23,7 @@ interface State {
     readonly elementStates?: ReadonlyMap<string, ElementState>;
 }
 
-interface ElementState {
+export interface ElementState {
     element: Element;
     templateProps: TemplateProps;
     blurred: boolean;
