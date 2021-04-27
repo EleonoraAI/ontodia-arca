@@ -1,4 +1,5 @@
 npm login
+npm run _webpack
 npm set registry http://registry.npmjs.org/
 npm link
 npm publish
