@@ -132,7 +132,7 @@ export interface WorkspaceState {
     readonly criteria?: SearchCriteria;
 }
 
-export class Workspace extends Component<WorkspaceProps, {}> {
+export class Workspace extends Component<WorkspaceProps, AppState> {
     static readonly defaultProps: Partial<WorkspaceProps> = {
         hideTutorial: true,
 
@@ -193,7 +193,7 @@ export class Workspace extends Component<WorkspaceProps, {}> {
         this.editor.setMetadataApi(metadataApi);
 
         this.view.setLanguage(this.props.language);
-        this.state = {};
+        this.state = {criteria:{}};
     }
 
     _getPaperArea(): PaperArea | undefined {
@@ -229,7 +229,7 @@ export class Workspace extends Component<WorkspaceProps, {}> {
             isLeftPanelOpen: this.props.leftPanelInitiallyOpen,
             isRightPanelOpen: this.props.rightPanelInitiallyOpen,
             toolbar: createElement(ToolbarWrapper, { workspace: this }),
-            onWorkspaceEvent,
+            onWorkspaceEvent: onWorkspaceEvent,
             watermarkSvg: this.props.watermarkSvg,
             watermarkUrl: this.props.watermarkUrl,
             elementsSearchPanel: _elementsSearchPanel,
@@ -237,7 +237,9 @@ export class Workspace extends Component<WorkspaceProps, {}> {
     }
 
     componentDidMount() {
+    
         const { onWorkspaceEvent } = this.props;
+        
 
         this.editor._initializePaperComponents(this.markup.paperArea);
         this.updateNavigator(!this.props.hideNavigator);
@@ -250,14 +252,27 @@ export class Workspace extends Component<WorkspaceProps, {}> {
         this.listener.listen(this.model.events, 'elementEvent', ({ key, data }) => {
             if (!data.requestedAddToFilter) { return; }
             const { source, linkType, direction } = data.requestedAddToFilter;
-            this.setState({
-                criteria: {
-                    refElement: source,
-                    refElementLink: linkType,
-                    linkDirection: direction,
-                },
-            });
+            
+            this.props.onSearchCriteriaChanged({
+                refElement: source,
+                refElementLink: linkType,
+                linkDirection: direction,
+                });
+        //    this.setState({
+        //         criteria: {
+        //             refElement: source,
+        //             refElementLink: linkType,
+        //             linkDirection: direction,
+        //             },
+        //     });
+            
+          
+           
+           
+            
+           
             if (onWorkspaceEvent) {
+               
                 onWorkspaceEvent(WorkspaceEventKey.searchUpdateCriteria);
             }
         });
@@ -510,9 +525,8 @@ type UrlProp = Pick<WorkspaceProps, ('watermarkUrl')>;
 type CriteriaProp = Pick<WorkspaceProps, ('criteria')>;
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-
-    onSearchCriteriaChanged: (newCriteria: SearchCriteria) => {
-        dispatch(Actions.onSearchCriteriaChanged(newCriteria));
+  onSearchCriteriaChanged: (criteria: SearchCriteria) => {
+        dispatch(Actions.onSearchCriteriaChanged(criteria));
 
     }
 });

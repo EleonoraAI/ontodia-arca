@@ -619,7 +619,7 @@ class LinkInPopupMenu extends React.Component<LinkInPopupMenuProps, {}> {
             'all connected';
 
         return (
-            <li data-linkTypeId={this.props.link.id}
+            <li data-linktypeid={this.props.link.id}
                 className='link-in-popup-menu' title={`${directionName} of "${fullText}" ${view.formatIri(link.id)}`}
                 onClick={() => this.onExpandLink(this.props.count, this.props.direction)}>
                 {this.props.direction === 'in' || this.props.direction === 'out' ?
